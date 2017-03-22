@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>学院管理</title>
+		<link href="../css/ext-all.css" rel="stylesheet"/>
+		<link href="../css/font-awesome/css/font-awesome.css" rel="stylesheet"/>
+		<link href="../css/fc-all.css" rel="stylesheet"/>
+	</head>
+	<body class="xn-body">
+		<div class="xn_nowpath">首页/用户管理/学院管理</div>
+		<div>
+			<div class="xn_section_wrap">
+				<div class="xn_search_form" style="" id="mainSearchBox">
+					
+				</div>
+			</div>
+			<div class="xn_section_wrap">
+				<div class="xn_section_title">
+					<span class="icon_wrap"><i class="icon-th"></i></span>
+					<span class="xn_title_name">系统人员列表</span>
+				</div>
+				<div id="mainTableBox"></div>
+			</div>
+		</div>
+		
+	
+	</body>
+	<script src="../lib/jquery-1.8.3.min.js"></script>
+	<script src="../js/basicParameter.js"></script>
+	<script src="../lib/ext-all.js"></script>
+	<script src="../js/basicExtModule.js"></script>
+	<script src="../lib/PagingToolBar.js"></script>
+	<script src="../js/tools.js"></script>
+	<script type="text/javascript">
+	var GLOBAL=GLOBAL||{}
+	Ext.onReady(function(){
+		//查询列表
+		GLOBAL.searchBox=Ext.create('Ext.form.Panel',{
+			renderTo:'mainSearchBox',
+			layout:'hbox',
+			margin:10,
+			items:[new Ext.custom.minitextfield({
+					itemId : "userName",//用来操作
+					name : "userName",
+					width:200,
+					margin:'0 10 0 0',
+					emptyText:'用户名'//注释==placeholder
+				}),new Ext.custom.minitextfield({
+					itemId : "email",//用来操作
+					name : "email",
+					width:200,
+					margin:'0 10 0 0',
+					emptyText:'邮箱'//注释==placeholder
+				}),new Ext.custom.minitextfield({
+					itemId : "phone",//用来操作
+					name : "phone",
+					width:200,
+					margin:'0 10 0 0',
+					emptyText:'手机号'//注释==placeholder
+				}),{
+				xtype:'panel',
+				html:'<button class="xn_btn xn_btn_success" id="btn_search" onclick="getEditList()">查&nbsp;&nbsp;询</button>'
+			}]
+		});
+		
+		
+		
+		//用户列表
+		 Ext.EventManager.onWindowResize(function () {
+		    	//getView 获取视图  refresh刷新
+		      GLOBAL.editGrid.getView().refresh()
+		    });
+		
+		    //分页控件分页
+		    GLOBAL.pageToolBar = Ext.create('PagingToolBar', {
+		      id: 'pageToolBar',
+		      onChange: function (pt, pageFirst, pageSize, type) {
+		        var pageStart = pageFirst / pageSize + 1;
+		        //pageStart页面开始第一条数据的下标 00 10
+		        //pageSize 每页加载多少数据
+		        getEditList(pageStart, pageFirst);
+		      }
+		    });
+		
+		    //权限选择
+		    GLOBAL.privilegeStore = Ext.create('Ext.data.Store', {
+		      fields: ['power', 'powerCode']
+		    });
+		
+		    //用户列表数据  --   
+		    GLOBAL.editListStore = Ext.create('Ext.data.Store', {
+		      fields: ['isstate','createAt', 'phone',  'email', 'tokenId',  'userName']
+		    });
+		
+		GLOBAL.editGrid=Ext.create('Ext.grid.Panel',{
+			store:GLOBAL.editListStore,
+			minHeight:BPR.gridMinHeight,
+			bbar:GLOBAL.pageToolBar,
+			id:'mainGridId',
+			columns:[
+			
+				{ header: '用户名', width:150, dataIndex: 'userName'},
+				{ header: '邮箱 ', width:150, dataIndex: 'email', flex : 1},
+				{ header: '手机', width:150, dataIndex: 'phone'},
+				{ header: '注册日期', width:150, dataIndex: 'createAt'},
+				{ header: '状态', width:150, dataIndex: 'isstate',
+					
+					
+					renderer: function(value,cellmeta, record){
+						var showText='';
+						value?showText="正常":showText='<span style="color:red">已冻结</span>';
+						
+                        //render的意义为将传入的数据，经过加工，返回新的dom，显示到表格中（这里a的样式，在fc-all.js中有从新定义）
+                        return showText;
+                    }
+				},
+				{
+					header: '操作', width:200, dataIndex: 'tokenId',
+				//表格写入html   value当前单元格的值  cellmeta 单元格id  record所子行数据record.data["id"]
+                    renderer: function(value,cellmeta, record){
+                    	var ableText="";
+                    	if(record.data.isstate){
+                    		ableText='解冻'
+                    	}else{
+                    		ableText='冻结'
+                    	}
+                        //render的意义为将传入的数据，经过加工，返回新的dom，显示到表格中（这里a的样式，在fc-all.js中有从新定义）
+                        return '<a class="xn_tablea" onclick="editUser('+value+')">'+ableText+'</a>';
+                    }
+				}
+			],
+			minHeight:320,
+			autoScroll:true,
+			renderTo:'mainTableBox'
+			
+		});
+		
+		getEditList();
+	});
+	//查询系统人员操作
+	function getEditList(pageStart,pageFirst){
+		//显示数据加载提示   getCmp 获取ext的组建  通过ID
+		msgTip = new Ext.LoadMask(Ext.getCmp('mainGridId'),{
+			msg:'数据加载中，请稍后...',
+			removeMask : true
+		});
+		//msgTip.show();
+		
+       $.ajax({
+			async:false,
+			url:BPR.domain + "/Handler/AdminHandler.ashx?action=usershow",
+			type:'post',
+			data:{
+			//搜索选项	
+				searchText:GLOBAL.searchBox.down('#userName').getValue(),
+				
+				pageStart:pageStart?pageStart:1
+				
+			},
+			dataType:'json',
+			
+			
+		}).done(function(data){
+			errTip(data,function(){
+				GLOBAL.privilegeStore.loadData(data.data);
+				GLOBAL.pageToolBar.setPageSize(data.data.pageSize);
+				GLOBAL.pageToolBar.loadPage(pageFirst?pageFirst:0,data.data.count);
+				GLOBAL.editListStore.loadData(data.data.list);
+			});
+		}).fail(function(){
+			Ext.Msg.alert("错误","获取列表失败！");
+		}).always(function(){
+			 msgTip.hide();
+		});
+	};
+	//账户冻结操作
+	function editUser(value){
+		$.ajax({
+			type:"get",
+			url:BPR.domain +"/Handler/AdminHandler.ashx?action=lockuser",
+			async:false,
+			data:{
+				tokenId:value
+			},
+			dataType:'json'
+		}).done(function(result){
+			errTip(result,function(){
+				getEditList();
+			})
+		}).fail(function(){
+			Ext.Msg.alert("温馨提示","操作失败")
+		}).always(function(){
+			
+		});
+	}
+	
+	</script>
+</html>

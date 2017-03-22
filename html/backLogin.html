@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>登陆界面</title>
+		<link rel="stylesheet" href="../css/font-awesome/css/font-awesome.css" />
+		<link id="skin" rel="stylesheet" href="../css/ext-all.css" />
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			.body{
+				background: #0D1953;
+				overflow: hidden;
+			}
+			canvas{
+				position: absolute;
+				top: 0;
+				left: 0;
+				z-index: 2;
+			}
+			img{
+				border: none;
+			}
+			.login_wrap{
+				width: 560px;
+				height: 320px;
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				margin-left: -280px;
+				margin-top: -180px;
+				z-index: 3;
+				color: #FFFFFF;
+			}
+			.login_wrap .logo{
+				margin-left: 140px;
+				margin-top: 29px;
+			}
+			.login_wrap input{
+				background: #0D1953;
+				width: 413px;
+				height: 34px;
+				line-height: 34px;
+				border: 1px solid #3c498a;
+				padding-left:12px ;
+				color: #FFFFFF;
+			}
+			input:focus{
+				outline: none;
+			}
+			.oneinput_box{
+				margin-bottom: 25px;
+				overflow: hidden;
+				width: 457px;
+				padding-left:50px ;
+				
+			}
+			.oneinput_box *{
+				float: left;
+			}
+			.oneinput_box span{
+				background: #0D1953;
+				border: 1px solid #3C498A;
+				padding: 11px 9px;
+				border-right: none 0;
+				height: 12px;
+				width: 10px;
+				overflow: hidden;
+			}
+			.oneinput_box .icon{
+				font-size: 12px;
+				width: 9px;
+				height: 12px;
+			}
+			.erwei_code{
+				width: 91px;
+				height: 34px;
+				float: right;
+				cursor: pointer;
+			}
+			.btn{
+				width: 113px;
+				height: 34px;
+				line-height: 34px;
+				border: none 0;
+				color: #FFFFFF;
+				text-align: center;
+				cursor: pointer;
+			}
+			.btn-infor{
+				background: #3cadcf;
+				float: left;
+				margin-left: 60px;
+			}
+			.btn-infor:hover{
+				background: #1f8fb0;
+			}
+			.btn-success{
+				background: #5CB85C;
+				float: right;
+				margin-right: 60px;
+			}
+			.btn-success:hover{
+				background: #449D44;
+				
+			}
+		</style>
+	</head>
+	<body class="body">
+		<canvas width="1920" height="1000"></canvas>
+		<div class="login_wrap">
+			<img class="logo" src="../images/back_logo.png" />
+			<form>
+				<div class="oneinput_box">
+					<span class="icon"><i class="icon icon-user"></i></span>
+					<input id="loginId" type="text" placeholder="用户名" />
+				</div>
+				<div class="oneinput_box">
+					<span class="icon"><i class="icon icon-lock"></i></span>
+					<input id="userPwd" type="password" placeholder="密码" />
+				</div>
+				<div class="oneinput_box">
+					<span class="icon"><i class="icon icon-lock"></i></span>
+					<input id="validCode" type="text" style="width: 310px;" placeholder="验证码" />
+					<img id="twoCodeImg" onclick="changeCode()" style="width:62px;height: 30px;margin-left: 10px;cursor: pointer;" src="../images/validatecode.png"/>
+				</div>
+			</form>
+			<button class="btn btn-infor" onclick="findBackPwd()">忘记密码？</button>
+			<button class="btn btn-success" id="loginButton" onclick="login()">登陆</button>
+		</div>
+	</body>
+	<script src="../lib/jquery-1.8.3.min.js"></script>
+	<script src="../js/canvas_dote.js"></script>
+	<script>
+		$(function(){
+			$('#loginId').focus();
+			$(document).keypress(function(e){
+				if(e.keyCode==13){
+					login();
+				}
+			});
+			
+		});
+		function login(){
+				var loginId=$('#loginId').val(),
+				userPwd=$('#userPwd').val(),
+				validCode=$('#validCode').val();
+				
+				if(loginId && userPwd && validCode){
+					$("#loginButton").attr({"disabled":'true'}).text('登陆中。。。。')
+				}
+				
+				$.ajax({
+					async:false,
+					url:"/Handler/AdminLoginAndRegHandler.ashx?action=login",
+					type:'post',
+					data:{
+						userName:loginId,
+						password:userPwd
+
+					},
+					dataType:'json',
+				}).done(function(result){
+					if(result.err){
+						alert(result.err)
+					}else if(result.success){
+						location.href="backHome.html"
+					}
+					
+				}).fail(function(){
+					alert('错误')
+				}).always(function(){
+					$("#loginButton").attr("disabled",false).text('登陆')
+				});
+				
+				
+				
+			}
+	</script>
+</html>

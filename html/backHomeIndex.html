@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>翡翠后台</title>
+		<link href="../css/font-awesome/css/font-awesome.css"  rel="stylesheet"/>
+		<link href="../css/backHomeIndex.css" rel="stylesheet" />
+	</head>
+	<body>
+		<div class="index_body">
+			<div class="quick_links">
+				<div class="quicklinks_one" ilink="courseList.html" myId="menu_courseList">
+					<h1>课程列表</h1>
+					<h2>Course List</h2>
+					<div class="icon_wrap"><i class="icon icon-th-large"></i></div>
+					<p>查询现有课程，添加课程，管理课程</p>
+				</div>
+				<div class="quicklinks_one" onclick="window.top.open('editCourse.html')">
+					<h1>课程添加</h1>
+					<h2>Course Add</h2>
+					<div class="icon_wrap"><i class="icon icon-plus"></i></div>
+					<p>添加、修改课程信息，为课程添加视频课件</p>
+				</div>
+				<div class="quicklinks_one" ilink="courseList.html" myId="menu_courseList">
+					<h1>课程置顶</h1>
+					<h2>Course Up</h2>
+					<div class="icon_wrap"><i class="icon icon-arrow-up"></i></div>
+					<p>课程置顶，显示在移动端banner上</p>
+				</div>
+				<div class="quicklinks_one" ilink="videoList.html" myId="menu_videoList">
+					<h1>房间卡复活</h1>
+					<h2>Course Up</h2>
+					<div class="icon_wrap"><i class="icon icon-facetime-video"></i></div>
+					<p>啊花非花啊分 非福建 而距离案发</p>
+				</div>
+				<div class="quicklinks_one" ilink="adminList.html" myId="menu_adminList">
+					<h1>房间卡复活</h1>
+					<h2>Course Up</h2>
+					<div class="icon_wrap"><i class="icon icon-user"></i></div>
+					<p>啊花非花啊分 非福建 而距离案发</p>
+				</div>
+				<div class="quicklinks_one mouse_on" ilink="studentList.html" myId="menu_studentList">
+					<h1>学院管理</h1>
+					<h2>Course Up</h2>
+					<div class="icon_wrap"><i class="icon icon-file"></i></div>
+					<p>啊花非花啊分</p>
+				</div>
+			</div>
+			<div class="charts_wrap">
+				<div style="background: #FFFFFF;padding-top: 20px;height: 340px;">
+					<div style="width: 400px;height: 370px;" id="chart01"></div>
+				</div>
+				<div style="background: #FFFFFF;padding-top: 20px;height: 340px;">
+					<div style="width:530px;height: 370px;" id="chart02"></div>
+				</div>
+				<div style="background: #FFFFFF;padding-top: 20px;height: 340px;">
+					<div style="width:580px;height: 370px;" id="chart03"></div>
+				</div>
+			</div>
+			
+			
+		</div>
+	</body>
+	<script src="../lib/jquery-1.8.3.min.js"></script>
+	<script src="../lib/dist/echarts.js"></script>
+	<script type="text/javascript" src="../js/backHomeIndex.js" ></script>
+</html>

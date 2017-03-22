@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>后台</title>
+		<link href="../css/ext-all.css" rel="stylesheet" />
+		<link href="../css/font-awesome/css/font-awesome.css" rel="stylesheet" />
+		<link href="../css/backHome.css" rel="stylesheet" />
+		<link href="../css/fc-all.css" rel="stylesheet" />
+	</head>
+	<body>
+		<div class="header_wrap">
+			<div class="logo_wrap"><a><img src="../images/back_logo.png"/></a></div>
+			<ul class="header_nav">
+				<li><a><i class="icon icon-globe"></i>卓新思创</a></li>
+				<li><a><i class="icon icon-comment"></i>在线客服</a></li>
+				<li><a><i class="icon icon-book"></i>常见问题</a></li>
+				<li><a onclick="modifyPassword()"><i class="icon icon-lock"></i>安全中心</a></li>
+				<li><a onclick="exitSystem()"><i class="icon icon-signout"></i>退出</a></li>
+				<li><img style="float: left; " src="../images/touxiang.jpg" /><span class="name" id="userName">小明</span></li>
+			</ul>
+			
+		</div>
+		<div class="nav_wrap">
+			<ul class="main_nav"> 
+				<li><a><i class="icon icon-user"></i>用户管理</a></li>
+				<li><a><i class="icon icon-book"></i>课程管理</a></li>
+			</ul>
+			
+			<div class="nav_content_wrap">
+				<div class="nav_moveout">
+					
+				</div>
+				<div class="nav_content">
+					<div class="one_nav_content_wrap">
+						<ul class="one_nav_content">
+							<li iLink="adminList.html" id="menu_adminList"><a><i class="icon icon-user"></i>系统人员</a></li>
+							<li iLink="studentList.html" id="menu_studentList" ><a><i class="icon icon-group"></i>学员管理</a></li>
+						</ul>
+					</div>
+					<div class="one_nav_content_wrap">
+						<ul class="one_nav_content">
+							<li iLink="curseList.html" id="menu_curseList"><a><i class="icon icon-th"></i>课程列表</a></li>
+							<li onclick="window.open('editCurse.html')" ><a><i class="icon icon-plus"></i>添加课程</a></li>
+							<li iLink="videoList.html" id="menu_videoList"><a><i class="icon icon-facetime-video"></i>视频管理</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="backHomeContent" >
+			
+		</div>
+	</body>
+	<script src="../lib/jquery-1.8.3.min.js"></script>
+	<script src="../lib/ext-all.js"></script>
+	<script src="../js/basicExtModule.js"></script>
+	<script src="../js/basicParameter.js"></script>
+	<script src="../js/tools.js"></script>
+	<script src="../js/backHome.js"></script>
+</html>
